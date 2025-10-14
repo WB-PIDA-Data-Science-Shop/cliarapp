@@ -1,9 +1,8 @@
-db_variables <- read_rds(
-  here(
-    "data",
-    "db_variables.rds"
-  )
-)
+# Load cliaretl R package
+library(cliaretl)
+
+db_variables <- 
+  cliaretl::db_variables
 
 # 1. Anti-corruption institutions ======================
 vars_anticorruption <-
