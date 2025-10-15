@@ -27,24 +27,22 @@ library(cicerone)
 library(shinyhelper)
 library(colourpicker)
 
+# Load cliaretl R package
+library(cliaretl)
+
 options(dplyr.summarise.inform = FALSE)
+
 
 ## Auxiliary functions -----------------------------------------------------------------
 
-db_variables <-
-  read_rds(
-    here(
-      "data",
-      "db_variables.rds"
-    )
-  )
+db_variables <- 
+  cliaretl::db_variables
 
-family_order <- read.csv(here(
-  "data",
-  "family_order.csv"
-))
+family_order <- 
+  cliaretl::family_order
 
-db_variables <- left_join(db_variables, family_order, by = "family_name")
+db_variables <- 
+  left_join(db_variables, family_order, by = "family_name")
 
 source(here("auxiliary", "vars-control.R"))
 
@@ -91,93 +89,70 @@ source(here("auxiliary","useBs4Dash.R"))
 # Data -------------------------------------------------------------
 
 raw_data <-
-  read_rds(
-    here(
-      "data",
-      "compiled_indicators.rds"
-    )
-  ) %>%
-  filter(year >= 1990,
-    rowSums(!is.na(.)) > 3) %>%
-  rename(Year = year) %>%
-  mutate(Year = as.double(Year))
+  readr::read_rds(here("data", "compiled_indicators.rds")) |>
+  dplyr::filter(year >= 1990) |>
+  dplyr::filter(
+    rowSums(dplyr::across(dplyr::starts_with("value_"), ~ !is.na(.))) > 3
+  ) |>
+  dplyr::rename(Year = year) |>
+  dplyr::mutate(Year = as.double(Year))
 
 
 
-
-global_data <-
-  read_rds(
-    here(
-      "data",
-      "closeness_to_frontier.rds"
-    )
-  ) %>%
-  ungroup 
-
-
-
-global_data_dyn <-
-  read_rds(
-    here(
-      "data",
-      "closeness_to_frontier_dynamic.rds"
-    )
-  ) %>%
-  filter(year <2024)%>%
-  ungroup
-
+global_data <- 
+  cliaretl::closeness_to_frontier_static |> 
+  ungroup() 
 
 ctf_long <-
-  read_rds(
-    here(
-      "data",
-      "closeness_to_frontier_long.rds"
-    )
+  cliaretl::closeness_to_frontier_static |> 
+  pivot_longer(
+    cols = -c(country_code, country_name, income_group, region),
+    names_to = "variable",
+    values_to = "value"
   )
 
+global_data_dyn <-
+  cliaretl::closeness_to_frontier_dynamic |>
+  filter(year <2024) |> 
+  ungroup()
 
 
 ctf_long_dyn <-
-  read_rds(
-    here(
-      "data",
-      "closeness_to_frontier_dynamic_long.rds"
-    )
+  cliaretl::closeness_to_frontier_dynamic |>
+  pivot_longer(
+    cols = -c(country_code, country_name, income_group, region, year),
+    names_to = "variable",
+    values_to = "value"
   )
+
 
 year_ctf_dynamic <-
-  read_rds(
+  read_csv(
     here(
       "data",
-      "year_coverage_ctf_for_analysis.rds"
+      "coverage_ctf_for_analysis.csv"
     )
   )
-country_groups <-
-  read_rds(
-    here(
-      "data",
-      "wb_country_groups.rds"
-    )
-  )
+
+country_groups <- cliaretl::wb_country_groups
 
 definitions <-
-  read_rds(
-    here(
-      "data",
-      "definitions.rds"
-    )
-  )
+  db_variables |>
+  filter(var_level == "indicator") |>
+  mutate(family_name = if_else(is.na(family_name) | family_name == "",
+                               "(other indicators)", family_name)) |>
+  select(Family = family_name,
+         Indicator = var_name,
+         Description = description,
+         Source = source) |>
+  dplyr::group_by(Family) |>
+  tidyr::nest(definitions = c(Indicator, Description, Source))
+
+
 
 country_list <-
-  read_rds(
-    here(
-      "data",
-      "wb_country_list.rds"
-    )
-  )
+  cliaretl::wb_country_list
 
-country_list <- country_list %>% 
-  rename(group = group_name)
 
 spatial_data <-
   read_rds(
@@ -187,44 +162,8 @@ spatial_data <-
     )
   )
 
-
-clean_country <-
-  read.csv(
-    here(
-      "data",
-      "Country_name_list.csv"
-    )
-  )  
-
-#THESE ARE NOT CURRENTLY IN USE. REMOVE LATER?
-#==========
-# down_clust_ctf_stat_data <- read_rds(
-#   here(
-#     "data",
-#     "closeness_to_frontier_confint_static.rds"
-#   )
-# )
-# 
-# down_clust_ctf_dyn_data <- read_rds(
-#   here(
-#     "data",
-#     "closeness_to_frontier_confint_dynamic.rds"
-#   )
-# )
-#==========
-for(i in 1:nrow(clean_country)){
-  if (clean_country[i,'Clean_Names']!=""){
-    country_list$country_name[country_list$country_name==clean_country[i,'Country']]=clean_country[i,'Clean_Names']
-    ctf_long$country_name[ctf_long$country_name==clean_country[i,'Country']]=clean_country[i,'Clean_Names']
-    ctf_long_dyn$country_name[ctf_long_dyn$country_name==clean_country[i,'Country']]=clean_country[i,'Clean_Names']
-    # raw_data$country_name[raw_data$country_name==clean_country[i,'Country']]=clean_country[i,'Clean_Names']
-    global_data$country_name[global_data$country_name==clean_country[i,'Country']]=clean_country[i,'Clean_Names']
-    global_data_dyn$country_name[global_data_dyn$country_name==clean_country[i,'Country']]=clean_country[i,'Clean_Names']
-    spatial_data$country_name[spatial_data$country_name==clean_country[i,'Country']]=clean_country[i,'Clean_Names']
-  }
-} 
-
-
+ 
+# Order datasets by country name for consistency
 country_list = country_list[order(country_list$country_name, decreasing = FALSE), ]
 ctf_long = ctf_long[order(ctf_long$country_name, decreasing = FALSE), ]
 ctf_long_dyn = ctf_long_dyn[order(ctf_long_dyn$country_name, decreasing = FALSE), ]
@@ -238,7 +177,7 @@ st_crs(spatial_data) <- "+proj=robin"
 
 # Load data control
 db_variables <-
-  db_variables %>%
+  db_variables |>
   filter(variable %in% vars_all | var_level == "family")
 
 
@@ -267,27 +206,34 @@ for (i in colnames(raw_data)[4:length(colnames(raw_data))]){
 
 # Options ---------------------------------------------------------
 
+# Define family_names from db_variables
+family_names <-
+  db_variables |>
+  filter(var_level == "family") |>
+  select(var_name) |>
+  distinct()
+
 variable_names <-
-  db_variables %>%
+  db_variables |>
   select(
     variable,
     var_level,
     var_name,
     family_var,
     family_name
-  )%>%
+  )|>
   filter(
     family_var!="vars_other"
   )
 
 countries <-
-  raw_data %>%
-  select(country_name) %>%
-  filter(!(country_name %in% country_groups$group_name)) %>%
-  unlist %>%
-  unname %>%
-  unique %>%
-  sort
+  raw_data |>
+  select(country_name) |>
+  filter(!(country_name %in% country_groups$group_name)) |>
+  unlist() |>
+  unname() |>
+  unique() |>
+  sort()
 
 # Get flags for each country
 country_flags_codes <- countrycode::countrycode(countries, "country.name.en", "ecb")
@@ -305,10 +251,10 @@ flags_with_countries <- mapply(function(country, code) {
 
 extract_variables <-
   function(x) {
-    db_variables %>%
+    db_variables |>
       filter(
         family_name == x
-      ) %>%
+      ) |>
       pull(var_name)
   }
 
@@ -319,10 +265,10 @@ names(variable_list) <- family_names$var_name
 
 extract_variables_benchmarked <-
   function(x) {
-    db_variables %>%
+    db_variables |>
       filter(
         family_name == x, benchmarked_ctf=='Yes'
-      ) %>%
+      ) |>
       pull(var_name)
   }
 
@@ -346,13 +292,13 @@ filtered_variable_list <- lapply(variable_list, remove_average_items)
 
 group_list <-
   list(
-    `Economic` = country_groups %>% filter(group_category == "Economic") %>% pull(group_name),
-    `Region` = country_groups %>% filter(group_category == "Region") %>% pull(group_name),
-    `Income` = country_groups %>% filter(group_category == "Income") %>% pull(group_name)
+    `Economic` = country_groups |> filter(group_category == "Economic") |> pull(group_name),
+    `Region` = country_groups |> filter(group_category == "Region") |> pull(group_name),
+    `Income` = country_groups |> filter(group_category == "Income") |> pull(group_name)
   )
 
 
-all_groups <- group_list %>% unlist %>% unname
+all_groups <- group_list |> unlist() |> unname()
 
 # Inputs ################################################################################
 
@@ -388,13 +334,13 @@ x_scatter_choices <- function(yvar){
   
 extract_xvar_choices <-
   function(x, yvar) {
-    db_variables %>%
+    db_variables |>
       dplyr::filter(
         var_name != yvar
-      ) %>% 
+      ) |> 
       dplyr::filter(
         family_name == x 
-      ) %>%
+      ) |>
       pull(var_name)
   }
 
@@ -405,3 +351,4 @@ xvar_choice_list <- c("Log GDP per capita, PPP",xvar_choice_list)
 
 return(xvar_choice_list)
 }
+

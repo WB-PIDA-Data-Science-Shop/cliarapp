@@ -2238,7 +2238,7 @@ server <- function(input, output, session) {
     data <- data %>%
       filter(country_name %in% c(selected_countries, groups)) %>%
       ungroup() %>%
-      mutate(across(where(is.numeric), round, 3)) %>%
+      mutate(across(where(is.numeric), \(x) round(x, 3)))
       select(any_of(vars_table))
     # Step 7: Handle Rank selection
     if (input$data_value == "Rank") {
