@@ -91,11 +91,13 @@ source(here("auxiliary","useBs4Dash.R"))
 raw_data <-
   readr::read_rds(here("data", "compiled_indicators.rds")) |>
   dplyr::filter(year >= 1990) |>
-  dplyr::filter(
-    rowSums(dplyr::across(dplyr::starts_with("value_"), ~ !is.na(.))) > 3
-  ) |>
-  dplyr::rename(Year = year) |>
-  dplyr::mutate(Year = as.double(Year))
+  #   dplyr::filter(
+  #     rowSums(dplyr::across(dplyr::starts_with("value_"), ~ !is.na(.))) > 3
+  #   ) |>
+     dplyr::rename(Year = year) |>
+     dplyr::mutate(Year = as.double(Year))
+
+
 
 
 
@@ -207,11 +209,11 @@ for (i in colnames(raw_data)[4:length(colnames(raw_data))]){
 # Options ---------------------------------------------------------
 
 # Define family_names from db_variables
-family_names <-
-  db_variables |>
-  filter(var_level == "family") |>
-  select(var_name) |>
-  distinct()
+family_names <- db_variables |>
+  select(variable = family_var, var_name = family_name) |>
+  distinct() |>
+  filter(variable != "vars_other")
+
 
 variable_names <-
   db_variables |>
