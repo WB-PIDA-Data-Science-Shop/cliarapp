@@ -41,6 +41,16 @@ db_variables <-
 family_order <- 
   cliaretl::family_order
 
+family_order <- family_order %>%
+  mutate(
+    family_name = case_when(
+      family_name == "Public Financial Management Institutions" ~ "Public Finance Institutions",
+      family_name == "Absence of Corruption" ~ "Degree of Integrity",
+      family_name == "Climate Change and Environment Institutions" ~ "Energy and Environment Institutions",
+      TRUE ~ family_name
+    )
+  )
+
 db_variables <- 
   left_join(db_variables, family_order, by = "family_name")
 

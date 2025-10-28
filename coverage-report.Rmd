@@ -234,7 +234,7 @@ generate_availability_heatmap <- function(data, country_name_input, family_name_
     filter(family_name == family_name_input) %>%    # Filter by family_name
     filter(benchmarked_ctf == "Yes") %>% 
     mutate(
-      availability_status = ifelse(is.na(indicator_value), "Not Available", "Available")
+      availability_status = ifelse(is.na(available_share), "Not Available", "Available")
     ) %>%
     ggplot(aes(x = year, y = str_wrap(var_name, width = 30), fill = availability_status)) +
     geom_tile(color = "white") +  
@@ -267,7 +267,7 @@ unique_family_names <- unique(ctf_dynamic_clean$family_name)
 
 # Loop through each unique family_name and apply the generate_availability_heatmap formula
 for(family_name in unique_family_names) {
-  print(generate_availability_heatmap(ctf_dynamic_clean,params$base_country, family_name))
+  #print(generate_availability_heatmap(ctf_dynamic_clean,params$base_country, family_name))
 }
 
 ```
