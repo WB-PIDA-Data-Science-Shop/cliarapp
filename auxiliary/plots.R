@@ -576,6 +576,7 @@ static_plot_dyn <-
     
     
     ctf_long_dyn <- ctf_long_dyn %>% 
+      left_join(db_variables %>% select(variable, var_name), by = "variable")%>%
       rowwise() %>% 
       mutate(var_name2 = paste(var_name, year, sep = " : ")) %>% 
       arrange(var_name2) %>% 
