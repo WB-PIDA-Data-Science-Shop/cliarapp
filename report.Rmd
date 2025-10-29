@@ -274,6 +274,106 @@ families <-
 ```
 \newpage
 
+
+# Dynamic Benchmarking
+
+The dynamic analysis of institutions is performed on a basis of `r params$base_country` available indicators that are grouped in `r length(unique(params$data_dyn$var_name))` institutional clusters.
+
+
+```{r,fig.height= 14,results = "asis"}
+  params$data_dyn_avg%>%
+  filter(str_detect(variable, "_avg"))%>%
+  left_join(.,params$family_order,by = 'family_name')%>%
+  #filter(Benchmark_dynamic_family_aggregate!='No')%>%
+  static_plot_dyn(
+    params$base_country,
+    "Country overview",
+    rank = params$rank,
+    group_median = params$group_median,
+    dots = params$dots,
+    title = FALSE,
+    note = paste(
+      source,
+      str_wrap(note, 174),
+      sep = "\n"
+    ),
+    threshold = params$threshold
+  )
+
+```
+
+
+```{r dyn_each_fam}
+if(params$download_opt==TRUE){
+
+families <-
+  params$family_order %>%
+  select(family_name) %>%
+  unlist
+
+  if (length(families) > 0) {
+  
+  cat("### CLIAR Dynamic Benchmarking: For Each Family\n\n")
+  
+    
+    family_names <-
+      paste(families, collapse = ", ")
+
+
+    for (family in families) {
+
+      vars <-
+        variable_names %>%
+        filter(family_name == family) %>%
+        select(var_name) %>%
+        unlist
+
+      data_dyn <-
+        params$data_dyn_avg %>%
+          filter(var_name %in% vars)
+
+
+    indicators<-unique(data_dyn$var_name)
+
+    if(length(indicators)>0){
+
+        for (i in seq(1, length(indicators), by = 2)) {
+            pair <- indicators[i:(i + 1)]
+            # Process the pair of elements here
+
+
+
+        data_dyn_sub <-data_dyn%>%
+          filter(var_name %in% pair)
+
+          try(
+            plot(
+              static_plot_dyn(
+                data_dyn_sub,
+                params$base_country,
+                rank = params$rank,
+                dots = params$dots,
+                family,
+                title = FALSE,
+                note = source,
+                threshold = params$threshold
+              )
+            )
+          )
+        }
+
+
+    }
+          cat("\n")
+        }
+
+  }
+
+}
+```
+\newpage 
+
+
 # Appendix A - Additional methodological details.
 
 The CLIAR Benchmarking is based on 137 indicators spanning the period between 1990 and 2022. These indicators are largely drawn from the EFI360 database, complemented by a small set of additional data sources that capture dimensions considered important for the analysis but that have not yet been included in the EFI360 platform. Indicators are selected based on two types of complementary and parallel reviews: (a) qualitative review, ensuring that the indicators selected are publicly available, conceptually relevant to each institutional family and of high quality (e.g., reputable institution, data collection and methodology) and (b) quantitative review, based on an assessment of indicator coverage for both country and year, with a particular focus on coverage for the last 5 years (i.e., 2018-2022). In particular, for the quantitative review we provide the following guiding criteria for inclusion (but exceptions are made on a case-by-case basis): 
