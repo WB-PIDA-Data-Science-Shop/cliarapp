@@ -115,7 +115,7 @@ ctf_long <-
 
 global_data_dyn <-
   cliaretl::closeness_to_frontier_dynamic |>
-  filter(year <2024) |> 
+  filter(year <= 2024) |> 
   ungroup()
 
 

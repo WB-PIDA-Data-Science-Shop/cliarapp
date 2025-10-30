@@ -1280,17 +1280,16 @@
       "Version": "0.1.0",
       "Source": "GitHub",
       "Type": "Package",
-      "Title": "What the Package Does (Title Case)",
-      "Author": "Who wrote it",
-      "Maintainer": "The package maintainer <yourself@somewhere.net>",
-      "Description": "More about what it does (maybe more than one line) Use four spaces when indenting paragraphs within the Description.",
+      "Title": "An ETL Framework Supporting the World Bank’s CLIAR Dashboard",
+      "Authors@R": "c( person(\"Ifeanyi\", \"Edochie\", email = \"iedochie@worldbank.org\", role = \"aut\"), person(\"Galileu\", \"Kim\", email = \"galileukim@worldbank.org\", role = \"aut\"), person(\"Ileana\", \"Marroquin\", email = \"imarroquinmartin@worldbank.org\", role = c(\"aut\", \"cre\")))",
+      "Description": "Provides a modular and reproducible ETL toolkit for the  Country-Level Institutional Assessment and Review (CLIAR) data.  It integrates external datasets (e.g., OECD, IMF, WDI, V-Dem) with metadata standards to support Shiny dashboards (cliarapp) and analytical workflows. The package standardizes data cleaning, metadata alignment, quality checks, global benchmarking (closeness-to-frontier CTF calculations) and coverage calculations across the CLIAR institutional clusters.",
       "License": "MIT + file LICENSE",
       "Encoding": "UTF-8",
       "LazyData": "true",
       "URL": "https://github.com/WB-PIDA-Data-Science-Shop/cliaretl",
       "BugReports": "https://github.com/WB-PIDA-Data-Science-Shop/cliaretl/issues",
       "Depends": [
-        "R (>= 3.5)"
+        "R (>= 4.1.0)"
       ],
       "RoxygenNote": "7.3.2",
       "Imports": [
@@ -1302,7 +1301,8 @@
         "dplyr",
         "pointblank",
         "tidyr",
-        "rmarkdown"
+        "rmarkdown",
+        "glue"
       ],
       "Suggests": [
         "testthat (>= 3.0.0)"
@@ -1313,7 +1313,10 @@
       "RemoteRepo": "cliaretl",
       "RemoteUsername": "WB-PIDA-Data-Science-Shop",
       "RemoteRef": "HEAD",
-      "RemoteSha": "51e1e0c327704627fb6e5f7db6046e0dd694386c"
+      "RemoteSha": "22f94ee61c76e5e376445f369cd58e2fd124d596",
+      "NeedsCompilation": "no",
+      "Author": "Ifeanyi Edochie [aut], Galileu Kim [aut], Ileana Marroquin [aut, cre]",
+      "Maintainer": "Ileana Marroquin <imarroquinmartin@worldbank.org>"
     },
     "clipr": {
       "Package": "clipr",

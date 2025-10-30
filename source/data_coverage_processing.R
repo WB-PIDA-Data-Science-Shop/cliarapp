@@ -44,42 +44,16 @@ vars_ctf <- db_variables |>
 
 # data_processing ---------------------------------------------------------
 
-ctf_year_long_diagnosis <- compiled_indicators |> 
+ctf_coverage_country_complete <- compiled_indicators |> 
   filter(between(year,2019,2023)) |> 
   pivot_longer(
     cols = -c(country_code, income_group, region, country_name, year),  # Exclude these columns
     names_to = "indicators", 
     values_to = "indicator_value"  
-  ) 
-
-# Calculate coverage for CTF benchmarked indicators using the custom function
-ctf_global_coverage <- ctf_year_long_diagnosis |>
-  select(-income_group, -region) |>  
-  compute_global_coverage(country_name, indicators, year, indicator_value)
-
-
-
-# Renaming and joining to db_variables classification 
-ctf_coverage_country_complete <- ctf_global_coverage |>
-  mutate(
-    available_share = case_when(
-      !is.na(available_share) ~ as.numeric(str_remove(available_share, "%")),
-      TRUE ~ NA_real_) 
-  )|>
+  ) %>% 
   left_join( # Join with db_variables
     db_variables |> select(variable, var_name, source, family_name, benchmarked_ctf),
     by = c("indicators" = "variable")
-  ) |>
-  left_join( # Join with country metadata
-    compiled_indicators |> 
-      select(country_name, country_code, income_group, region) |> 
-      distinct(),
-    by = "country_name"
-  ) |> 
-  select( # Select and reorder columns
-    country_code,country_name, income_group, region,
-    indicators, year_range, available_years, available_share,
-    var_name, family_name, source, benchmarked_ctf
   )
 
 # Save the processed data -------------------------------------------------
