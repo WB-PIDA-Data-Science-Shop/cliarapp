@@ -274,6 +274,7 @@ families <-
 ```
 \newpage
 
+
 # Dynamic Benchmarking
 
 The dynamic analysis of institutions is performed on a basis of `r params$base_country` available indicators that are grouped in `r length(unique(params$data_dyn$var_name))` institutional clusters.
@@ -371,6 +372,7 @@ families <-
 }
 ```
 \newpage 
+
 
 # Appendix A - Additional methodological details.
 

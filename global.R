@@ -35,8 +35,8 @@ options(dplyr.summarise.inform = FALSE)
 
 ## Auxiliary functions -----------------------------------------------------------------
 
-db_variables <- 
-  cliaretl::db_variables
+db_variables <-
+  cliaretl::db_variables_final
 
 family_order <- 
   cliaretl::family_order
