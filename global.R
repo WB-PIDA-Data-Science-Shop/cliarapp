@@ -35,8 +35,8 @@ options(dplyr.summarise.inform = FALSE)
 
 ## Auxiliary functions -----------------------------------------------------------------
 
-db_variables <- 
-  cliaretl::db_variables
+db_variables <-
+  cliaretl::db_variables_final
 
 family_order <- 
   cliaretl::family_order
@@ -115,7 +115,7 @@ ctf_long <-
 
 global_data_dyn <-
   cliaretl::closeness_to_frontier_dynamic |>
-  filter(year <2024) |> 
+  filter(year <= 2024) |> 
   ungroup()
 
 

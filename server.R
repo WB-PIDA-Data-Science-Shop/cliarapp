@@ -2238,7 +2238,7 @@ server <- function(input, output, session) {
     data <- data %>%
       filter(country_name %in% c(selected_countries, groups)) %>%
       ungroup() %>%
-      mutate(across(where(is.numeric), \(x) round(x, 3)))
+      mutate(across(where(is.numeric), \(x) round(x, 3))) %>%
       select(any_of(vars_table))
     # Step 7: Handle Rank selection
     if (input$data_value == "Rank") {
@@ -2709,75 +2709,16 @@ server <- function(input, output, session) {
       
       params <-
         list(
-          ctf_static_long = ctf_long,
+          ctf_static_long = ctf_long %>%
+            left_join(
+              db_variables %>%
+                select(variable, var_name, family_var, family_name),
+              by = "variable"
+            )
+          ,
           ctf_dynamic = year_ctf_dynamic,
           base_country = base_country()
         )
-      
-      
-      
-      rmarkdown::render(
-        tempReport,
-        output_file = file,
-        params = params,
-        envir = new.env(parent = globalenv()),
-        knit_root_dir = getwd()
-      )
-    }
-  )
-  
-    
-  # Missingness Report ================================================================================
-
-  output$download_missing <- downloadHandler(
-    filename =
-      reactive(
-        paste0(
-          "Missing_data-",
-          base_country(),
-          ".docx"
-        )
-      ),
-    content = function(file) {
-      show_modal_spinner(
-        color = "#17a2b8",
-        text = "Compiling report",
-      )
-      
-      on.exit(remove_modal_spinner())
-      
-      tmp_dir <- tempdir()
-      
-      tempReport <- file.path(tmp_dir, "Missing_report.Rmd")
-      
-      file.copy("www/", tmp_dir, recursive = TRUE)
-      file.copy("Missing_report.Rmd", tempReport, overwrite = TRUE)
-      
-      params <-
-        list(
-          base_country = base_country(),
-          comparison_countries = input$countries,
-          data = data_avg(),
-          wb_country_list = country_list,
-          family_data = data_family(),
-          data_dyn = data_dyn(),
-          data_dyn_avg = data_dyn_avg(),
-          family_data_dyn = data_family_dyn(),
-          rank = input$rank,
-          definitions = definitions,
-          variable_names = variable_names,
-          dots = input$benchmark_dots,
-          group_median = input$benchmark_median,
-          threshold = input$threshold,
-          family_order = family_order,
-          global_data = global_data,
-          family_order = family_order,
-          download_opt = input$download_Opt,
-          compiled_indicators = raw_data,
-          db_variables = db_variables
-        )
-      
-      
       
       rmarkdown::render(
         tempReport,
@@ -2809,8 +2750,8 @@ server <- function(input, output, session) {
       on.exit(remove_modal_spinner())
       
       tmp_dir <- tempdir()
-      
-      tempReport <- file.path(tmp_dir, "CLAR_template.pptx")
+      #browser()
+      tempReport <- file.path(tmp_dir, "CLIAR_template.pptx")
       
       # file.copy("www/", tmp_dir, recursive = TRUE)
       # file.copy("CLAR_template.pptx", tempReport, overwrite = TRUE)
@@ -2880,22 +2821,22 @@ server <- function(input, output, session) {
       
       
       slide_index = 10
-      
+
       #family_n <- data()%>%
       family_n <- db_variables%>%
         distinct(family_name)%>%
         filter(!is.na(family_name))%>%
         pull(family_name) %>%
         as.list()
-      
-      
+
+
       for(fam_n in family_order$family_name){
         if(fam_n %in% family_n){
           fam_variable_names<-variable_names %>%
             filter(family_name == fam_n) %>%
             pull(variable) %>%
             unique()
-          
+
           plt_f<-data_avg() %>%
             filter(variable %in% fam_variable_names)%>%
             static_plot(
@@ -2910,9 +2851,9 @@ server <- function(input, output, session) {
               title = FALSE,
               report = TRUE
             )
-          
+
           plt_f<-dml(ggobj = plt_f)
-          
+
           ppt <- ppt %>%
             add_slide(master = "Custom Design")%>%
             on_slide(index = slide_index) %>%
@@ -2921,19 +2862,19 @@ server <- function(input, output, session) {
               left = 1.5, top = 1.2,
               width = 10.04, height = 4.67, bg = "transparent"
             ))
-          
+
           slide_index = slide_index+1
         }
       }
       
-      # ppt<-ppt%>%
-      #   add_slide(master = "Custom Design")%>%
-      #   on_slide(index = slide_index) %>%
-      #   ph_with(value = "Dynamic Benchmarking : Overview", location = ph_location(left = 1, top = 0.4,width = 12))%>%
-      #   ph_with(value = plot2, location = ph_location(
-      #     left = 1.5, top = 1.2,
-      #     width = 10.04, height = 4.67, bg = "transparent"
-      #   ))
+      ppt<-ppt%>%
+        add_slide(master = "Custom Design")%>%
+        on_slide(index = slide_index) %>%
+        ph_with(value = "Dynamic Benchmarking : Overview", location = ph_location(left = 1, top = 0.4,width = 12))%>%
+        ph_with(value = plot2, location = ph_location(
+          left = 1.5, top = 1.2,
+          width = 10.04, height = 4.67, bg = "transparent"
+        ))
       
       print(ppt, file)
     }
