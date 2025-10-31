@@ -714,17 +714,6 @@ ui <-
                     )
                   )
                 )
-                #Commenting Out MISSINGNESS REPORT until it is fixed (Formatting is bad)
-                # column(
-                #   width = 4,
-                #   shinyjs::disabled(
-                #     downloadButton(
-                #       "download_missing",
-                #       "Missingness report",
-                #       style = "width:100%; background-color: #204d74; color: white"
-                #     )
-                #   )
-                # )
               )
               # shiny::column(3,
               #               shinyWidgets::materialSwitch(

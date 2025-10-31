@@ -67,7 +67,6 @@ wrap_facet_titles <- function(x, width) {
   str_wrap(x, width = width)
 }
 
-
 theme_set(
   theme_minimal() +
   theme(
@@ -119,6 +118,13 @@ In the context of out methodology note, to understand indicator-level data avail
 ```{r include=FALSE}
 # Clean and normalize the availability column, handling NA values
 availability_ctf_long <- params$ctf_static_long %>%
+  # remove family averages
+  filter(
+    !str_detect(
+      variable,
+      "_avg$"
+    )
+  ) |> 
   mutate(
     availability = ifelse(is.na(value), "missing", "available")
   )
@@ -225,8 +231,12 @@ share_table_long %>%
 ```{r echo=FALSE}
 # Clean Dataframe 
 ctf_dynamic_clean <- params$ctf_dynamic %>%
-                    filter(family_name != "(other indicators)") %>% 
-                    filter(!is.na(family_name))
+  # remove family indicators and non-family indicators
+  filter(
+    !str_detect(indicators, "_avg$") &
+      family_name != "(other indicators)" &
+      !is.na(family_name)
+    )
 
 # Create a Function
 generate_availability_heatmap <- function(data, country_name_input, family_name_input) {
