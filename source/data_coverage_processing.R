@@ -45,7 +45,8 @@ vars_ctf <- db_variables |>
 # data_processing ---------------------------------------------------------
 
 ctf_coverage_country_complete <- compiled_indicators |> 
-  filter(between(year,2019,2023)) |> 
+  # 2025 release, should take the static 2020 to 2024 period
+  filter(between(year,2020,2024)) |> 
   pivot_longer(
     cols = -c(country_code, income_group, region, country_name, year),  # Exclude these columns
     names_to = "indicators", 
