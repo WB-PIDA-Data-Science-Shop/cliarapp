@@ -97,19 +97,21 @@ This report is divided into three key sections. **Section i. Data Update Frequen
 
 ## i. Data Update Frequency and Timing
 
-| Manual Data Sources                | Latest year on dashboard | Expected Publication cycle |
-|-------------------------------|--------------------|---------------------|
-| Fraser Institute                   | 2021                     | Annual                     |
-| Heritage Index of Economic Freedom | 2023                     | Annual                     |
-| Open Budget Survey                 | 2021                     | Bi-annually                |
-| RISE                               | 2021                     | Bi-annually                |
-| Romelli (2022)                     | 2018                     | Academic Source            |
-| SPI                                | 2022                     | Bi-annually                |
-| V-DEM                              | 2023                     | Annually                   |
-| WBL: Women, Business and the Law   | 2024                     | Annually                   |
-| WDI                                | 2023                     | Annually                   |
+To provide context for the analysis of data coverage, it is essential to understand the update frequency and timing of the data sources that construct the indicators used in the CLIAR framework. The table below summarizes the latest year available on the dashboard for each manual data source, along with their expected publication cycles. This information helps to assess the timeliness of the data and identify potential limitations in the analysis.
 
-In the context of out methodology note, to understand indicator-level data availability and expected Publication Cycles within the Country Level Institutional Assessment and Review (CLIAR) framework, consult the [Indicators Definition](https://w0lxdrconn01.worldbank.org/CLIAR_UAT/){refer section Methodology & User Guide - List of Indicators} file for a comprehensive overview. For data sourced directly from Prosperity Data 360 via their API, indicator-specific metadata is available in the [Resources section](https://prosperitydata360.worldbank.org/en/resources), enabling case-by-case examination. This information complements the following sections of this report, which detail data update frequency, overall coverage across clusters, and yearly coverage within each cluster.
+| Manual Data Extraction (sources)   | Latest year on dashboard | Expected Publication cycle |
+|------------------------------------|--------------------|----------------------------------|
+| Fraser Institute                   | 2022                     | Annual                     |
+| Heritage Index of Economic Freedom | 2024                     | Annual                     |
+| Open Budget Survey                 | 2023                     | Bi-annually                |
+| RISE                               | 2021                     | Bi-annually                |
+| Romelli                            | 2023                     | Academic Source            |
+| SPI                                | 2023                     | Bi-annually                |
+| V-DEM                              | 2024                     | Annually                   |
+| WBL: Women, Business and the Law   | 2024                     | Annually                   |
+| WDI                                | 2024                     | Annually                   |
+
+Additionally, in the context of out methodology note, to understand indicator-level data availability and expected Publication Cycles within the Country Level Institutional Assessment and Review (CLIAR) framework, consult the [Indicators Definition](https://w0lxdrconn01.worldbank.org/CLIAR_UAT/){refer section Methodology & User Guide - List of Indicators} file for a comprehensive overview. For data sourced directly from Prosperity Data 360 via their API, indicator-specific metadata is available in the [Resources section](https://prosperitydata360.worldbank.org/en/resources), enabling case-by-case examination. This information complements the following sections of this report, which detail data update frequency, overall coverage across clusters, and yearly coverage within each cluster.
 
 \newpage
 
