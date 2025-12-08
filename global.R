@@ -97,10 +97,6 @@ raw_data <-
      dplyr::rename(Year = year) |>
      dplyr::mutate(Year = as.double(Year))
 
-
-
-
-
 global_data <- 
   cliaretl::closeness_to_frontier_static |> 
   ungroup() 
