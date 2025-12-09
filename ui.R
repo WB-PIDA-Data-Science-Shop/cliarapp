@@ -1565,8 +1565,8 @@ ui <-
                   pickerInput(
                     "vars",
                     label = "Select institutional families to include",
-                    choices = names(definitions),
-                    selected = names(definitions),
+                    choices = definitions |> pull(Family),
+                    selected = definitions |> pull(Family),
                     multiple = TRUE,
                     options = list(`actions-box` = TRUE)
                   ),
