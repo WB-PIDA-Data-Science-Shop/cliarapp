@@ -1155,7 +1155,7 @@ static_map <-
             "): ",
             get(color) %>% round(3),
             "<br>",
-            "Closeness to frontier (2013-2020): ",
+            "Closeness to frontier (2020-2024): ",
             get(paste0("ctf_", var)) %>% round(3)
           )
         )
