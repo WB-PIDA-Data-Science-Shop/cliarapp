@@ -715,14 +715,6 @@ ui <-
                   )
                 )
               )
-              # shiny::column(3,
-              #               shinyWidgets::materialSwitch(
-              #                 inputId = "show_dynamic_plot",
-              #                 label = "Show dynamic benchmark plot",
-              #                 status = "success",
-              #                 value = FALSE
-              #               )
-              # )
           ),
           
           ### Static Benchmarks ----
@@ -734,12 +726,11 @@ ui <-
             conditionalPanel(
               "input.select !== 0",
               fluidRow(
-                
                 column(
                   width = 12,
                   plotlyOutput(
                     "plot",
-                    height = paste0(plot_height * 3, "px")
+                    height = paste0(2.25 * plot_height, "px")
                   ) %>% shinycssloaders::withSpinner(color = "#051f3f", type = 8)
                 )
               ),

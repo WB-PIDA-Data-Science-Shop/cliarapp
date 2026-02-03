@@ -920,15 +920,13 @@ server <- function(input, output, session) {
    
     renderUI({
       #Commented out to handle custom groups
-      #if (length(input$countries) >= 10 & length(input$country) >=1) {
-      if ((length(input$countries) + length(input$groups)) >= 10 & length(input$country) >=1) {  
+      if ((length(input$countries) + length(input$groups)) >= 10 && length(input$country) >=1) {  
       actionButton(
           "select",
           "Apply selection",
           icon = icon("check"),
           status = "success",
           width = "100%",
-          #shinyjs::show("save_inputs"),
           shinyjs::enable("save_inputs")
         )
       } else {
@@ -945,19 +943,7 @@ server <- function(input, output, session) {
           shinyjs::disable('download_Coverage'),
           shinyjs::disable("download_data_1"),
           shinyjs::disable("save_inputs")
-
-        ) #|>
-        #helper(
-        #  type = "inline",
-        #  icon = "circle-question",
-        #  title = "Apply",
-        #  content = c(
-        #    "Click on this box to (re-)run the analysis and (re-)load the resulting graphs. Note that this has to be done for every new selection or option, including a different institutional cluster. This option is enabled when the base country and at least 10 comparison countries are selected."
-        #  ),
-        #  buttonLabel = "Close",
-        #  fade = T,
-        #  size = "s"
-        #)
+        ) 
       }
     })
   
@@ -1913,13 +1899,9 @@ server <- function(input, output, session) {
     }
   })
   
-  # Reactive expression to filter available comparison countries based on selected indicator
-  browser()
-
   filtered_countries_bar <- reactive({
     req(input$vars_bar)  # Ensure the indicator is selected
     
-    countries_vector <- sapply(countries, function(country) check_data(data(), country, input$vars_bar))
      # Filter countries based on check_data function
     countries[!sapply(countries, function(country) check_data(data(), country, input$vars_bar))]
   })

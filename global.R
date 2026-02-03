@@ -240,7 +240,7 @@ variable_names <-
   )
 
 countries <-
-  raw_data |>
+  global_data |>
   select(country_name) |>
   filter(!(country_name %in% country_groups$group_name)) |>
   unlist() |>
