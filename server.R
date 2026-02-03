@@ -1913,13 +1913,14 @@ server <- function(input, output, session) {
   })
   
   # Reactive expression to filter available comparison countries based on selected indicator
-  
+  browser()
+
   filtered_countries_bar <- reactive({
     req(input$vars_bar)  # Ensure the indicator is selected
     
-    countries %>%
-      # Filter countries based on check_data function
-      .[!sapply(., function(country) check_data(data(), country, input$vars_bar))]
+    countries_vector <- sapply(countries, function(country) check_data(data(), country, input$vars_bar))
+     # Filter countries based on check_data function
+    countries[!sapply(countries, function(country) check_data(data(), country, input$vars_bar))]
   })
   
   
