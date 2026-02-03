@@ -1897,6 +1897,7 @@ server <- function(input, output, session) {
     return(custom_df_bar)
     
   })
+  
   #================Reactive Menu Elements for Bar Chart
   
   # # Reactive expression to get dataset based on  user input

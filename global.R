@@ -341,7 +341,6 @@ all_groups <- group_list |> unlist() |> unname()
 
 # Inputs ################################################################################
 
-# plot_height <- 650
 plot_height <- 500
 
 customItem <-
@@ -362,7 +361,6 @@ y_scatter_choices <- append(
   "Log GDP per capita, PPP",
   variable_list
 )
-
 
 ## x axis variable choices will be everything apart from the y axis variable selected
 x_scatter_choices <- function(yvar) {
