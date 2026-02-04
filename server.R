@@ -43,6 +43,9 @@
 #    - Displays an interactive data table with options for filtering, sorting, 
 #      and downloading data in various formats (e.g., CSV, Excel).
 
+# Source server helper components
+source(here("R", "_server", "server_inputs.R"))
+source(here("R", "_server", "server_downloads.R"))
 
 server <- function(input, output, session) {
   # Handle inputs ======================================================================

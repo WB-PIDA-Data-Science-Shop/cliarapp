@@ -47,43 +47,43 @@ db_variables <-
 source(here("auxiliary", "vars-control.R"))
 
 # Function that defines quantiles based on country, comparison and variables
-source(here("auxiliary", "fun_quantiles.R"))
-source(here("auxiliary", "fun_family_data.R"))
-source(here("auxiliary", "fun_missing_var.R"))
-source(here("auxiliary", "fun_low_variance.R"))
-source(here("auxiliary", "fun_loadInputs.R"))
+source(here("R", "data_processing", "fun_quantiles.R"))
+source(here("R", "data_processing", "fun_family_data.R"))
+source(here("R", "data_processing", "fun_missing_var.R"))
+source(here("R", "data_processing", "fun_low_variance.R"))
+source(here("R", "utils", "fun_loadInputs.R"))
 
 # Create benchmark graphs
-source(here("auxiliary", "plots.R"))
-source(here("auxiliary", "clean_plotly_legend.R"))
-source(here("auxiliary", "fixfacets.R"))
+source(here("R", "plotting", "plots.R"))
+source(here("R", "plotting", "clean_plotly_legend.R"))
+source(here("R", "plotting", "fixfacets.R"))
 
 #Functions that prepare data for download in different file formats
-source(here("auxiliary", "fun_download_prep.R"))
+source(here("R", "data_processing", "fun_download_prep.R"))
 
 #Functions that check for null data by indicator
-source(here("auxiliary", "fun_check_data.R"))
+source(here("R", "data_processing", "fun_check_data.R"))
 
 #Functions that extracts variables 
-source(here("auxiliary", "fun_extract_var.R"))
+source(here("R", "utils", "fun_extract_var.R"))
 
 #Functions that remove aggregate average columns from datasets
-source(here("auxiliary", "fun_remove_avg.R"))
+source(here("R", "utils", "fun_remove_avg.R"))
 
 # Function that displays publications
-source(here("auxiliary", "fun_publications.R"))
+source(here("R", "utils", "fun_publications.R"))
 
 # Modules
-source(here("modules", "mod_publications.R"))
+source(here("R", "modules", "mod_publications.R"))
 
 #Functions that prepare plotting settings
-source(here("auxiliary","fun_plot_prep.R" ))
+source(here("R", "plotting", "fun_plot_prep.R"))
 
 # Guide/help
-source(here("auxiliary", "guides.R"))
+source(here("R", "utils", "guides.R"))
 
 #Use Bs4Dash Package post deprecation
-source(here("auxiliary","useBs4Dash.R"))
+source(here("R", "utils", "useBs4Dash.R"))
 
 
 # Data -------------------------------------------------------------
