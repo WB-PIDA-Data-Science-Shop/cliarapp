@@ -38,10 +38,10 @@ options(dplyr.summarise.inform = FALSE)
 db_variables <-
   cliaretl::db_variables_final
 
-family_order <- 
+family_order <-
   cliaretl::family_order
 
-db_variables <- 
+db_variables <-
   left_join(db_variables, family_order, by = "family_name")
 
 source(here("auxiliary", "vars-control.R"))
@@ -64,7 +64,7 @@ source(here("auxiliary", "fun_download_prep.R"))
 #Functions that check for null data by indicator
 source(here("auxiliary", "fun_check_data.R"))
 
-#Functions that extracts variables 
+#Functions that extracts variables
 source(here("auxiliary", "fun_extract_var.R"))
 
 #Functions that remove aggregate average columns from datasets
@@ -77,13 +77,13 @@ source(here("auxiliary", "fun_publications.R"))
 source(here("modules", "mod_publications.R"))
 
 #Functions that prepare plotting settings
-source(here("auxiliary","fun_plot_prep.R" ))
+source(here("auxiliary", "fun_plot_prep.R"))
 
 # Guide/help
 source(here("auxiliary", "guides.R"))
 
 #Use Bs4Dash Package post deprecation
-source(here("auxiliary","useBs4Dash.R"))
+source(here("auxiliary", "useBs4Dash.R"))
 
 
 # Data -------------------------------------------------------------
@@ -91,22 +91,16 @@ source(here("auxiliary","useBs4Dash.R"))
 raw_data <-
   readr::read_rds(here("data", "compiled_indicators.rds")) |>
   dplyr::filter(year >= 1990) |>
-  #   dplyr::filter(
-  #     rowSums(dplyr::across(dplyr::starts_with("value_"), ~ !is.na(.))) > 3
-  #   ) |>
-     dplyr::rename(Year = year) |>
-     dplyr::mutate(Year = as.double(Year))
+  dplyr::rename(Year = year) |>
+  dplyr::mutate(Year = as.double(Year))
 
 
-
-
-
-global_data <- 
-  cliaretl::closeness_to_frontier_static |> 
-  ungroup() 
+global_data <-
+  cliaretl::closeness_to_frontier_static |>
+  ungroup()
 
 ctf_long <-
-  cliaretl::closeness_to_frontier_static |> 
+  cliaretl::closeness_to_frontier_static |>
   pivot_longer(
     cols = -c(country_code, country_name, income_group, region),
     names_to = "variable",
@@ -115,7 +109,7 @@ ctf_long <-
 
 global_data_dyn <-
   cliaretl::closeness_to_frontier_dynamic |>
-  filter(year <= 2024) |> 
+  filter(year <= 2024) |>
   ungroup()
 
 
@@ -141,15 +135,21 @@ country_groups <- cliaretl::wb_country_groups
 definitions <-
   db_variables |>
   filter(var_level == "indicator") |>
-  mutate(family_name = if_else(is.na(family_name) | family_name == "",
-                               "(other indicators)", family_name)) |>
-  select(Family = family_name,
-         Indicator = var_name,
-         Description = description,
-         Source = source) |>
+  mutate(
+    family_name = if_else(
+      is.na(family_name) | family_name == "",
+      "(other indicators)",
+      family_name
+    )
+  ) |>
+  select(
+    Family = family_name,
+    Indicator = var_name,
+    Description = description,
+    Source = source
+  ) |>
   dplyr::group_by(Family) |>
   tidyr::nest(definitions = c(Indicator, Description, Source))
-
 
 
 country_list <-
@@ -164,15 +164,23 @@ spatial_data <-
     )
   )
 
- 
+
 # Order datasets by country name for consistency
-country_list = country_list[order(country_list$country_name, decreasing = FALSE), ]
+country_list = country_list[
+  order(country_list$country_name, decreasing = FALSE),
+]
 ctf_long = ctf_long[order(ctf_long$country_name, decreasing = FALSE), ]
-ctf_long_dyn = ctf_long_dyn[order(ctf_long_dyn$country_name, decreasing = FALSE), ]
+ctf_long_dyn = ctf_long_dyn[
+  order(ctf_long_dyn$country_name, decreasing = FALSE),
+]
 raw_data = raw_data[order(raw_data$country_name, decreasing = FALSE), ]
 global_data = global_data[order(global_data$country_name, decreasing = FALSE), ]
-global_data_dyn = global_data_dyn[order(global_data_dyn$country_name, decreasing = FALSE), ]
-spatial_data = spatial_data[order(spatial_data$country_name, decreasing = FALSE), ]
+global_data_dyn = global_data_dyn[
+  order(global_data_dyn$country_name, decreasing = FALSE),
+]
+spatial_data = spatial_data[
+  order(spatial_data$country_name, decreasing = FALSE),
+]
 
 
 st_crs(spatial_data) <- "+proj=robin"
@@ -184,27 +192,30 @@ db_variables <-
 
 
 #Add Label Attirbutes to DTA file
-for (i in colnames(global_data)[4:length(colnames(global_data))]){
-  name<-subset(db_variables$var_name,db_variables$variable==i)
-  if(length(name)>0){
-    name<-str_replace_all(name, "[[:punct:]]", "")
-    attr(global_data[[i]],'label')<-name
-  }}
+for (i in colnames(global_data)[4:length(colnames(global_data))]) {
+  name <- subset(db_variables$var_name, db_variables$variable == i)
+  if (length(name) > 0) {
+    name <- str_replace_all(name, "[[:punct:]]", "")
+    attr(global_data[[i]], 'label') <- name
+  }
+}
 
-for (i in colnames(global_data_dyn)[5:length(colnames(global_data_dyn))]){
-  name<-subset(db_variables$var_name,db_variables$variable==i)
-  if(length(name)>0){
-    name<-str_replace_all(name, "[[:punct:]]", "")
-    attr(global_data_dyn[[i]],'label')<-name
-  }}
+for (i in colnames(global_data_dyn)[5:length(colnames(global_data_dyn))]) {
+  name <- subset(db_variables$var_name, db_variables$variable == i)
+  if (length(name) > 0) {
+    name <- str_replace_all(name, "[[:punct:]]", "")
+    attr(global_data_dyn[[i]], 'label') <- name
+  }
+}
 
 
-for (i in colnames(raw_data)[4:length(colnames(raw_data))]){
-  name<-subset(db_variables$var_name,db_variables$variable==i)
-  if(length(name)>0){
-    name<-str_replace_all(name, "[[:punct:]]", "")
-    attr(raw_data[[i]],'label')<-name
-  }}
+for (i in colnames(raw_data)[4:length(colnames(raw_data))]) {
+  name <- subset(db_variables$var_name, db_variables$variable == i)
+  if (length(name) > 0) {
+    name <- str_replace_all(name, "[[:punct:]]", "")
+    attr(raw_data[[i]], 'label') <- name
+  }
+}
 
 # Options ---------------------------------------------------------
 
@@ -223,13 +234,13 @@ variable_names <-
     var_name,
     family_var,
     family_name
-  )|>
+  ) |>
   filter(
-    family_var!="vars_other"
+    family_var != "vars_other"
   )
 
 countries <-
-  raw_data |>
+  global_data |>
   select(country_name) |>
   filter(!(country_name %in% country_groups$group_name)) |>
   unlist() |>
@@ -238,17 +249,33 @@ countries <-
   sort()
 
 # Get flags for each country
-country_flags_codes <- countrycode::countrycode(countries, "country.name.en", "ecb")
+country_flags_codes <- countrycode::countrycode(
+  countries,
+  "country.name.en",
+  "ecb"
+)
 
 # Match "West Bank and Gaza" code for flagcdn
 country_get_palestine <- c("West Bank and Gaza" = "PS")
 
 # Function to get flags with countries
-flags_with_countries <- mapply(function(country, code) {
-  flag_html <- tags$img(src = paste0(src = 'https://flagcdn.com/w20/', tolower(code), '.png'), alt = code)
-  label_html <- tags$span(country)
-  paste(flag_html, label_html, sep = " ")
-}, countries, ifelse(countries == "West Bank and Gaza", country_get_palestine["West Bank and Gaza"], countrycode::countrycode(countries, "country.name.en", "ecb")), SIMPLIFY = FALSE)
+flags_with_countries <- mapply(
+  function(country, code) {
+    flag_html <- tags$img(
+      src = paste0(src = 'https://flagcdn.com/w20/', tolower(code), '.png'),
+      alt = code
+    )
+    label_html <- tags$span(country)
+    paste(flag_html, label_html, sep = " ")
+  },
+  countries,
+  ifelse(
+    countries == "West Bank and Gaza",
+    country_get_palestine["West Bank and Gaza"],
+    countrycode::countrycode(countries, "country.name.en", "ecb")
+  ),
+  SIMPLIFY = FALSE
+)
 
 
 extract_variables <-
@@ -269,7 +296,8 @@ extract_variables_benchmarked <-
   function(x) {
     db_variables |>
       filter(
-        family_name == x, benchmarked_ctf=='Yes'
+        family_name == x,
+        benchmarked_ctf == 'Yes'
       ) |>
       pull(var_name)
   }
@@ -280,7 +308,10 @@ variable_list_benchmarked <-
 names(variable_list_benchmarked) <- family_names$var_name
 
 # Exclude Monetary Stability - #296
-variable_list_benchmarked$`Public Finance Institutions` <- variable_list_benchmarked$`Public Finance Institutions` [variable_list_benchmarked$`Public Finance Institutions`  != "Monetary stability"]
+variable_list_benchmarked$`Public Finance Institutions` <- variable_list_benchmarked$`Public Finance Institutions`[
+  variable_list_benchmarked$`Public Finance Institutions` !=
+    "Monetary stability"
+]
 
 
 remove_average_items <- function(family) {
@@ -294,9 +325,15 @@ filtered_variable_list <- lapply(variable_list, remove_average_items)
 
 group_list <-
   list(
-    `Economic` = country_groups |> filter(group_category == "Economic") |> pull(group_name),
-    `Region` = country_groups |> filter(group_category == "Region") |> pull(group_name),
-    `Income` = country_groups |> filter(group_category == "Income") |> pull(group_name)
+    `Economic` = country_groups |>
+      filter(group_category == "Economic") |>
+      pull(group_name),
+    `Region` = country_groups |>
+      filter(group_category == "Region") |>
+      pull(group_name),
+    `Income` = country_groups |>
+      filter(group_category == "Income") |>
+      pull(group_name)
   )
 
 
@@ -304,53 +341,49 @@ all_groups <- group_list |> unlist() |> unname()
 
 # Inputs ################################################################################
 
-# plot_height <- 650
 plot_height <- 500
 
-customItem <- 
-  function(text, 
-    icon = shiny::icon("warning"),
-    href = NULL, ...) {
-    
-    if (is.null(href)) 
-     
+customItem <-
+  function(text, icon = shiny::icon("warning"), href = NULL, ...) {
+    if (is.null(href)) {
       tags$li(
         a(href = href, icon, text, class = "nav-link", target = "_blank"),
         class = "nav-item"
       )
+    }
   }
-
 
 # Bivariate correlation ----------------------------------------------------------
 
-## y axis variable choices  
+## y axis variable choices
 
 y_scatter_choices <- append(
   "Log GDP per capita, PPP",
   variable_list
 )
 
-
 ## x axis variable choices will be everything apart from the y axis variable selected
-x_scatter_choices <- function(yvar){
-  
-extract_xvar_choices <-
-  function(x, yvar) {
-    db_variables |>
-      dplyr::filter(
-        var_name != yvar
-      ) |> 
-      dplyr::filter(
-        family_name == x 
-      ) |>
-      pull(var_name)
-  }
+x_scatter_choices <- function(yvar) {
+  extract_xvar_choices <-
+    function(x, yvar) {
+      db_variables |>
+        dplyr::filter(
+          var_name != yvar
+        ) |>
+        dplyr::filter(
+          family_name == x
+        ) |>
+        pull(var_name)
+    }
 
-xvar_choice_list <- purrr::map2(family_names$var_name, yvar, extract_xvar_choices)
-names(xvar_choice_list) <- family_names$var_name
+  xvar_choice_list <- purrr::map2(
+    family_names$var_name,
+    yvar,
+    extract_xvar_choices
+  )
+  names(xvar_choice_list) <- family_names$var_name
 
-xvar_choice_list <- c("Log GDP per capita, PPP",xvar_choice_list)
+  xvar_choice_list <- c("Log GDP per capita, PPP", xvar_choice_list)
 
-return(xvar_choice_list)
+  return(xvar_choice_list)
 }
-

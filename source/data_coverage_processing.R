@@ -66,6 +66,3 @@ write_csv(
     "coverage_ctf_for_analysis.csv"
   )
 )
-
-
-
