@@ -89,7 +89,10 @@ source(here("auxiliary", "useBs4Dash.R"))
 # Data -------------------------------------------------------------
 
 raw_data <-
-  readr::read_rds(here("data", "compiled_indicators.rds")) |>
+  fs::path_package(
+    "extdata", "compiled_indicators.rds", package = "cliaretl"
+  ) |> 
+  read_rds() |> 
   dplyr::filter(year >= 1990) |>
   dplyr::rename(Year = year) |>
   dplyr::mutate(Year = as.double(Year))
@@ -157,13 +160,12 @@ country_list <-
 
 
 spatial_data <-
-  read_rds(
-    here(
-      "data",
-      "indicators_map.rds"
-    )
-  )
-
+  fs::path_package(
+    "extdata",
+    "indicators_map.rds",
+    package = "cliaretl"
+  ) |> 
+  read_rds()
 
 # Order datasets by country name for consistency
 country_list = country_list[
