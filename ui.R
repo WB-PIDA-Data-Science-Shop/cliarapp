@@ -107,7 +107,7 @@ ui <-
                  href = "mailto:CLIAR@worldbank.org"),
         menuItem("Source code", 
                  icon = icon("github", lib = "font-awesome"),
-                 href = "https://github.com/worldbank/institutional-assessment-dashboard/")
+                 href = "https://github.com/WB-PIDA-Data-Science-Shop/cliarapp")
       )
     ),
     
