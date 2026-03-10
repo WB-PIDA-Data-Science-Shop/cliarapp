@@ -88,19 +88,6 @@ cliarapp/
 
 ---
 
-## Key Packages
-
-| Package | Role |
-|---------|------|
-| `shiny` / `bs4Dash` | App framework and dashboard layout |
-| `cliaretl` | Internal ETL package providing processed CTF scores and metadata |
-| `plotly` / `ggplot2` | Interactive and static visualisations |
-| `shinyWidgets` / `shinyjs` | Enhanced UI controls and JS interactions |
-| `sf` | Spatial data for the world map |
-| `officer` / `openxlsx` | Word/PowerPoint/Excel report generation |
-| `cicerone` | Interactive guided tour |
-| `renv` | Reproducible package environment |
-
 ---
 
 ## Data
