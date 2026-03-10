@@ -11,11 +11,13 @@ It enables policymakers, researchers, and stakeholders to compare institutional 
 ### Prerequisites
 
 - R ≥ 4.5
-- The `cliaretl` R package (internal World Bank package providing processed datasets)
+- The `cliaretl` R package (World Bank package providing processed datasets)
 
 ### Running the App
 
 ```r
+renv::restore() #install all package dependencies
+
 shiny::runApp()
 ```
 
@@ -113,4 +115,4 @@ The data used for this Shiny dashboard is provided through the `cliaretl` packag
 
 ## Deployment
 
-The app is deployed to Posit Connect. Deployment manifests are in `rsconnect/internal-server/galileukim/`. Usage telemetry is tracked via `usage_tracker.qmd`.
+The app is deployed to Posit Connect. For more information on how to deploy it, please see [here](https://rstudio.github.io/rsconnect/reference/deployApp.html).
