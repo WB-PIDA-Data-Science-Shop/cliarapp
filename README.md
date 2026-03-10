@@ -1,6 +1,8 @@
 # cliarapp
 
-An R Shiny dashboard for the **Country-Level Institutional Assessment and Reform (CLIAR)** benchmarking tool, developed by the World Bank. It enables policymakers, researchers, and stakeholders to compare institutional indicator performance across countries using closeness-to-frontier scores.
+An R Shiny dashboard for the **Country-Level Institutional Assessment and Reform (CLIAR)** benchmarking tool, developed by the World Bank. 
+
+It enables policymakers, researchers, and stakeholders to compare institutional indicator performance across countries using closeness-to-frontier scores.
 
 ---
 
@@ -10,7 +12,6 @@ An R Shiny dashboard for the **Country-Level Institutional Assessment and Reform
 
 - R ≥ 4.5
 - The `cliaretl` R package (internal World Bank package providing processed datasets)
-- Access to the project's OneDrive folder for proprietary data files (see `data/README.md`)
 
 ### Running the App
 
@@ -102,9 +103,7 @@ cliarapp/
 
 ## Data
 
-Data is proprietary and not stored in this repository. See [`data/README.md`](data/README.md) for instructions on obtaining the required files from the project OneDrive.
-
-The `cliaretl` package provides:
+The data used for this Shiny dashboard is provided through the `cliaretl` package. It provides:
 - `closeness_to_frontier_static` — static CTF scores
 - `closeness_to_frontier_dynamic` — time-varying CTF scores
 - `db_variables_final` — indicator metadata
