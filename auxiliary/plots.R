@@ -1680,44 +1680,45 @@ interactive_bar <-
           title = list(text = '<b>Closeness to\nfrontier:</b>'),
           y = 0.5
         ),
-        margin = list(t = 75, b = 220),
+        margin = list(t = 75, b = 250),
         annotations =
-          list(x = -.6,
-               y = -.4,
-               text = HTML(
-                 paste(
-                   
-                   str_wrap(
-                     paste(
-                       "<b>Note:</b>,Data displayed is based on the CTF data. <br>",
-                       "<b>Definition:</b>",
-                       def$description
-                     ),
-                     note_chars
-                   ),
-                   str_wrap(
-                     paste(
-                       "<b>Source:</b>",
-                       def$source
-                     ),
-                     note_chars
-                   ),
-                   sep = "<br>"
-                 )
-               ),
-               showarrow = F,
-               xref = 'paper',
-               yref = 'paper',
-               align = 'left',
-               font = list(size = note_size)
+          list(
+            x = 0,
+            y = -0.35,
+            text = HTML(
+              paste(
+                "<b>Note:</b> Data displayed is based on the CTF data.<br>",
+                "<b>Definition:</b>",
+                str_replace_all(
+                  str_wrap(
+                    def$description,
+                    200
+                  ),
+                  "\n",
+                  "<br>"
+                ),
+                "<br>"
+              ),
+              paste(
+                "<b>Source:</b>",
+                def$source
+              )
+            ),
+            showarrow = FALSE,
+            xref = "paper",
+            yref = "paper",
+            xanchor = "left",
+            yanchor = "top",
+            align = "left",
+            font = list(size = note_size)
           )
       ) %>%
       config(
         modeBarButtonsToRemove = buttons,
         toImageButtonOptions = list(
-          filename = paste0(tolower(stringr::str_replace_all(var,"\\s","_")),"_map"),
+          filename = paste0(tolower(stringr::str_replace_all(var, "\\s", "_")), "_bar"),
           width = 1050,
-          height =  675
+          height = 675
         )
       )
 
