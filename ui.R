@@ -335,21 +335,22 @@ ui <-
                 column(
                   id = "show_countries_column",
                   width = 3,
-                  style = "display: flex; align-items: center; justify-content: center;",
+                  style = "display: flex; flex-direction: column; gap: 6px; align-items: flex-start;",
+                  helper(
+                    shiny_tag = tags$b("Show list of countries"),
+                    type = "inline",
+                    icon = "circle-question",
+                    title = "List of countries",
+                    content = c(
+                      "Here you can add and remove individual comparator countries. If you have already selected one or more the pre-defined groups, those countries will appear as selected, and you can manually add or remove."
+                    ),
+                    buttonLabel = "Close",
+                    fade = TRUE,
+                    size = "s"
+                  ),
                   shinyWidgets::materialSwitch(
                     inputId = "show_countries",
-                    label = helper(
-                      shiny_tag = tags$b("Show list of countries"),
-                      type = "inline",
-                      icon = "circle-question",
-                      title = "List of countries",
-                      content = c(
-                        "Here you can add and remove individual comparator countries. If you have already selected one or more the pre-defined groups, those countries will appear as selected, and you can manually add or remove."
-                      ),
-                      buttonLabel = "Close",
-                      fade = T,
-                      size = "s"
-                    ),
+                    label = NULL,
                     value = FALSE,
                     status = "success"
                   )
@@ -357,11 +358,9 @@ ui <-
                 column(
                   id = "custom_grps_column",
                   width = 3,
-                  style = "display: flex; align-items: center; justify-content: left;",
-                  shinyWidgets::materialSwitch(
-                    inputId = "create_custom_grps",
-                    label = helper(
-                      shiny_tag = tags$b("Create custom groups"),
+                  style = "display: flex; flex-direction: column; gap: 6px; align-items: flex-start;",
+                  helper(
+                    shiny_tag = tags$b("Create custom groups"),
                       type = "inline",
                       icon = "circle-question",
                       title = "Custom groups",
@@ -372,7 +371,10 @@ ui <-
                       buttonLabel = "Close",
                       fade = T,
                       size = "s"
-                    ),
+                  ),
+                  shinyWidgets::materialSwitch(
+                    inputId = "create_custom_grps",
+                    label = NULL,
                     value = FALSE,
                     status = "success"
                   )
@@ -715,14 +717,6 @@ ui <-
                   )
                 )
               )
-              # shiny::column(3,
-              #               shinyWidgets::materialSwitch(
-              #                 inputId = "show_dynamic_plot",
-              #                 label = "Show dynamic benchmark plot",
-              #                 status = "success",
-              #                 value = FALSE
-              #               )
-              # )
           ),
           
           ### Static Benchmarks ----
@@ -734,12 +728,11 @@ ui <-
             conditionalPanel(
               "input.select !== 0",
               fluidRow(
-                
                 column(
                   width = 12,
                   plotlyOutput(
                     "plot",
-                    height = paste0(plot_height * 3, "px")
+                    height = paste0(2.25 * plot_height, "px")
                   ) %>% shinycssloaders::withSpinner(color = "#051f3f", type = 8)
                 )
               ),
@@ -1565,8 +1558,8 @@ ui <-
                   pickerInput(
                     "vars",
                     label = "Select institutional families to include",
-                    choices = names(definitions),
-                    selected = names(definitions),
+                    choices = definitions |> pull(Family),
+                    selected = definitions |> pull(Family),
                     multiple = TRUE,
                     options = list(`actions-box` = TRUE)
                   ),
@@ -1586,25 +1579,28 @@ ui <-
                     )
                   ),
                   #Input selector for download column names
-                  (
-                  shinyWidgets::materialSwitch(
-                    inputId = "descriptions_dwnld",
-                    label = helper(
+                  div(
+                    style = "display: flex; flex-direction: column; gap: 6px; align-items: flex-start;",
+                    helper(
                       shiny_tag = tags$b("Descriptive Columns"),
                       type = "inline",
                       icon = "circle-question",
                       title = "Descriptive Names",
                       content = c(
-                    "Here you can select whether you want abrreviated or full names for each of the columns in the downloaded data."
+                        "Here you can select whether you want abrreviated or full names for each of the columns in the downloaded data."
                       ),
                       buttonLabel = "Close",
-                      fade = T,
+                      fade = TRUE,
                       size = "s"
                     ),
-                    value = FALSE,
-                    status = "success"
-                  )),
-                  
+                    # Switch below
+                    shinyWidgets::materialSwitch(
+                      inputId = "descriptions_dwnld",
+                      label = NULL,
+                      value = FALSE,
+                      status = "success"
+                    )
+                  ),
                   shinyjs::hidden(
                     radioGroupButtons(
                       "data_value",
