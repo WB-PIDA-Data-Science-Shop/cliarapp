@@ -173,7 +173,8 @@ status_colors <- c(
 
 # Ensure all three levels are present in the factor so the legend is complete
 plot_data <- plot_data |>
-  mutate(status = factor(status, levels = status_levels))
+  mutate(status = factor(status, levels = status_levels)) |> 
+  filter(variable != "vars_pfm") # Exclude 'Other' family if present (not in PFM but just in case)
 
 # Build the plot
 pfm_plot <-
