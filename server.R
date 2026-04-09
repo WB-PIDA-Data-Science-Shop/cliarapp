@@ -1917,9 +1917,8 @@ server <- function(input, output, session) {
   filtered_countries_bar <- reactive({
     req(input$vars_bar)  # Ensure the indicator is selected
     
-    countries %>%
-      # Filter countries based on check_data function
-      .[!sapply(., function(country) check_data(data(), country, input$vars_bar))]
+    # Filter out countries that have missing data (where check_data returns TRUE)
+    countries[!sapply(countries, function(country) check_data(data(), country, input$vars_bar))]
   })
   
   
