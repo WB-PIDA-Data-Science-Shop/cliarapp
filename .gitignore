@@ -50,3 +50,9 @@ rsconnect/
 
 # Usage tracker
 usage_tracker*
+
+# Generated output files from eg-pfm-analysis
+eg-pfm-analysis/*.png
+eg-pfm-analysis/*.csv
+eg-pfm-analysis/*.dta
+

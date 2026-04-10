@@ -3202,7 +3202,7 @@
     "hrbrthemes": {
       "Package": "hrbrthemes",
       "Version": "0.9.2",
-      "Source": "GitHub",
+      "Source": "Git",
       "Type": "Package",
       "Title": "Additional Themes, Theme Components and Utilities for 'ggplot2'",
       "Date": "2025-03-14",
@@ -3238,13 +3238,11 @@
         "utils"
       ],
       "RoxygenNote": "7.3.2",
-      "Author": "Bob Rudis [aut, cre] (ORCID: <https://orcid.org/0000-0001-5670-2640>), Patrick Kennedy [ctb], Philipp Reiner [ctb], Dan Wilson [ctb] (Secondary axis support), Xavier Adam [ctb], Google [cph] (Roboto Condensed), IBM [cph] (Plex Sans Font), Goldman Sachs [cph] (Goldman Sans Font), Impallari Type [cph] (Public Sans Font), Jacob Barnett [ctb], Thomas J. Leeper [ctb] (ORCID: <https://orcid.org/0000-0003-4097-6326>), Joris Meys [ctb], Steph Ango [ctb] (Flexoki creator)",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteUsername": "hrbrmstr",
-      "RemoteRepo": "hrbrthemes",
-      "RemoteRef": "master",
-      "RemoteSha": "d3fd02949fc201c6db616ccaffbb9858aec6fd2b"
+      "RemoteType": "xgit",
+      "RemoteUrl": "https://codeberg.org/hrbrmstr/hrbrthemes.git",
+      "RemoteSha": "d3fd02949fc201c6db616ccaffbb9858aec6fd2b",
+      "NeedsCompilation": "no",
+      "Author": "Bob Rudis [aut, cre] (ORCID: <https://orcid.org/0000-0001-5670-2640>), Patrick Kennedy [ctb], Philipp Reiner [ctb], Dan Wilson [ctb] (Secondary axis support), Xavier Adam [ctb], Google [cph] (Roboto Condensed), IBM [cph] (Plex Sans Font), Goldman Sachs [cph] (Goldman Sans Font), Impallari Type [cph] (Public Sans Font), Jacob Barnett [ctb], Thomas J. Leeper [ctb] (ORCID: <https://orcid.org/0000-0003-4097-6326>), Joris Meys [ctb], Steph Ango [ctb] (Flexoki creator)"
     },
     "htmlTable": {
       "Package": "htmlTable",

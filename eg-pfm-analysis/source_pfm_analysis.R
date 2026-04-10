@@ -115,6 +115,12 @@ write_dta(
   here("eg-pfm-analysis", "pfm_plot_data.dta")
 )
 
+
+write_csv(
+  pfm_plot_data,
+  here("eg-pfm-analysis", "pfm_plot_data.csv")
+)
+
 # OPTIONAL:
 # # Filter to base country only (what the dashboard shows as the dot)
 # pfm_base <- pfm_plot_data |> filter(country_name == base_country)
