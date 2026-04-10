@@ -11,8 +11,8 @@ library(here)
 ggsave <- partial(
   ggplot2::ggsave,
   bg     = "white",
-  width  = 22,
-  height = 10
+  width  = 16,
+  height = 6
 )
 
 # data load and functions -------------------------------------------------
@@ -108,7 +108,8 @@ pfm_indicator_data <-
   filter(variable %in% vars_pfm)
 
 # --- Step 3: Combine family average + individual indicators ---
-pfm_plot_data <- bind_rows(pfm_family_data, pfm_indicator_data)
+pfm_plot_data <- bind_rows(pfm_family_data, pfm_indicator_data) |> 
+  select(-q_lv_75, q_lv_25) # not needed
 
 write_dta(
   pfm_plot_data,
