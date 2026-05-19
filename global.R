@@ -279,7 +279,6 @@ flags_with_countries <- mapply(
   SIMPLIFY = FALSE
 )
 
-
 extract_variables <-
   function(x) {
     db_variables |>
@@ -314,7 +313,6 @@ variable_list_benchmarked$`Public Finance Institutions` <- variable_list_benchma
   variable_list_benchmarked$`Public Finance Institutions` !=
     "Monetary stability"
 ]
-
 
 remove_average_items <- function(family) {
   family_filtered <- family[!grepl("Average", family)]
@@ -358,9 +356,26 @@ customItem <-
 # Bivariate correlation ----------------------------------------------------------
 
 ## y axis variable choices
+# maybe a better way to do this is to create a header cluster
+# called outcomes, where all the outcome variables
+# live and are listed first.
+# that means variable_list will have 14 elements,
+# 1 for outcomes and 13 for the institutional families.
+outcome_variables <- db_variables |> 
+  filter(
+    str_detect(variable, "wb_csc")
+  ) |> 
+  pull(var_name)
+
+outcomes_list <- list(
+  "Outcomes" = c(
+    "Log GDP per capita, PPP",
+    outcome_variables
+  )
+)
 
 y_scatter_choices <- append(
-  "Log GDP per capita, PPP",
+  outcomes_list,
   variable_list
 )
 
@@ -385,7 +400,7 @@ x_scatter_choices <- function(yvar) {
   )
   names(xvar_choice_list) <- family_names$var_name
 
-  xvar_choice_list <- c("Log GDP per capita, PPP", xvar_choice_list)
+  xvar_choice_list <- c(outcomes_list, xvar_choice_list)
 
   return(xvar_choice_list)
 }
