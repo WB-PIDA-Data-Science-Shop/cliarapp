@@ -1858,14 +1858,12 @@ static_scatter <-
         income_group,
         region,
         country_group,
-        x,
-        y
-      )
-
-    sc_data <- sc_data %>%
+        all_of(x),
+        all_of(y)
+      ) %>%
       rename(
-        !!x_scatter := x, # Rename 'x' to the value in x_scatter
-        !!y_scatter := y # Rename 'y' to the value in y_scatter
+        !!x_scatter := all_of(x), # Rename 'x' col to the value in x_scatter
+        !!y_scatter := all_of(y) # Rename 'y' col to the value in y_scatter
       )
 
     #PLOTTING THE SCATTER PLOT
