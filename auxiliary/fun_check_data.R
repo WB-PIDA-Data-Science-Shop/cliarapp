@@ -4,7 +4,6 @@
 #This function checks data for base countries in time trend, bar plot, and scatterplot
 
 check_data <-function(data,country,indicator_1, indicator_2=NULL){
-
   #One variable scenario (used in bar and time trend)
   if (is.null(indicator_2)){
     #Establishes the variable (column) searched for
@@ -25,13 +24,26 @@ check_data <-function(data,country,indicator_1, indicator_2=NULL){
   #Two indicator scenario used in bivariate correlation
   else{
 
+  # if either indicator is the Log GDP per capita, overwrite it as wdi_nygdppcapppkd
+  if(indicator_1 == "Log GDP per capita, PPP") {
+    indicator_1 <- db_variables %>%
+      filter(variable == "wdi_nygdppcapppkd") %>%
+      pull(var_name)
+  }
+
+  if(!is.null(indicator_2) && indicator_2 == "Log GDP per capita, PPP") {
+    indicator_2 <- db_variables %>%
+      filter(variable == "wdi_nygdppcapppkd") %>%
+      pull(var_name)
+  }
+
     # Extracts the columns for the given indicators
     vars <- db_variables %>%
       filter(var_name %in% c(indicator_1, indicator_2)) %>%
       pull(variable)
 
     # Checks that both indicators are in data
-    if (all(vars %in% names(data))) {
+    if (length(vars) == 2) {
       has_na <- data %>%
         filter(country_name == country) %>%
         select(all_of(vars)) %>%
@@ -46,6 +58,7 @@ check_data <-function(data,country,indicator_1, indicator_2=NULL){
       return(TRUE)
   }
 }}
+
 #============================== Raw Data Check data function (used in time trends plot)
 trends_check_data <- function(start_year, end_year, country, var) {
 

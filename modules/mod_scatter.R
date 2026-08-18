@@ -152,6 +152,11 @@ mod_scatter_server <- function(id,
     })
 
     high_group <- reactive({
+      # render the plot if the highlight group is not selected (i.e., null)
+      if (is.null(input$high_group) || input$high_group == "No highlight") {
+        return(country_list[0, ] %>% select(group, country_name))
+      }
+
       high_group_df <- country_list %>%
         filter(group %in% input$high_group) %>%
         select(group, country_name)
