@@ -7,7 +7,7 @@ source("modules/mod_trends.R")
 source("modules/mod_world_map.R")
 source("modules/mod_data.R")
 
-source("ui.R")
-source("server.R")
+source("modules/ui.R")
+source("modules/server.R")
 
 shinyApp(ui, server)
