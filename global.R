@@ -36,7 +36,11 @@ options(dplyr.summarise.inform = FALSE)
 ## Auxiliary functions -----------------------------------------------------------------
 
 db_variables <-
-  cliaretl::db_variables_final
+  cliaretl::db_variables_final |>
+  # exclude monetary stability
+  filter(
+    variable != "bs_bti_q8_1"
+  )
 
 family_order <-
   cliaretl::family_order
@@ -227,7 +231,6 @@ family_names <- db_variables |>
   distinct() |>
   filter(variable != "vars_other")
 
-
 variable_names <-
   db_variables |>
   select(
@@ -352,55 +355,3 @@ customItem <-
       )
     }
   }
-
-# Bivariate correlation ----------------------------------------------------------
-
-## y axis variable choices
-# maybe a better way to do this is to create a header cluster
-# called outcomes, where all the outcome variables
-# live and are listed first.
-# that means variable_list will have 14 elements,
-# 1 for outcomes and 13 for the institutional families.
-outcome_variables <- db_variables |> 
-  filter(
-    str_detect(variable, "wb_csc")
-  ) |> 
-  pull(var_name)
-
-outcomes_list <- list(
-  "Outcomes" = c(
-    "Log GDP per capita, PPP",
-    outcome_variables
-  )
-)
-
-y_scatter_choices <- append(
-  outcomes_list,
-  variable_list
-)
-
-## x axis variable choices will be everything apart from the y axis variable selected
-x_scatter_choices <- function(yvar) {
-  extract_xvar_choices <-
-    function(x, yvar) {
-      db_variables |>
-        dplyr::filter(
-          var_name != yvar
-        ) |>
-        dplyr::filter(
-          family_name == x
-        ) |>
-        pull(var_name)
-    }
-
-  xvar_choice_list <- purrr::map2(
-    family_names$var_name,
-    yvar,
-    extract_xvar_choices
-  )
-  names(xvar_choice_list) <- family_names$var_name
-
-  xvar_choice_list <- c(outcomes_list, xvar_choice_list)
-
-  return(xvar_choice_list)
-}

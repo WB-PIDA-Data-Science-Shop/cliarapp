@@ -1,6 +1,71 @@
 mod_scatter_ui <- function(id) {
   ns <- NS(id)
 
+  db_variables <- cliaretl::db_variables_final
+
+  ## y axis variable choices
+  outcome_variables <- db_variables |> 
+    filter(
+      str_detect(variable, "wb_csc")
+    ) |> 
+    pull(var_name)
+
+  outcomes_list <- list(
+    "Outcomes" = c(
+      "Log GDP per capita, PPP",
+      outcome_variables
+    )
+  )
+
+  # extract list of benchmarked indicators by family
+  family_names <- db_variables |>
+    select(variable = family_var, var_name = family_name) |>
+    distinct() |>
+    filter(variable != "vars_other") |>
+    pull(var_name)
+
+  variable_list_benchmarked <- purrr::map(
+    family_names,
+    function(x) {
+      db_variables |>
+        filter(family_name == x & benchmarked_ctf == "Yes") |>
+        pull(var_name)
+    }
+  ) 
+
+  names(variable_list_benchmarked) <- family_names
+
+  y_scatter_choices <- append(
+    outcomes_list,
+    variable_list_benchmarked # defined in global.R
+  )
+
+  ## x axis variable choices will be everything apart from the y axis variable selected
+  x_scatter_choices <- function(yvar) {
+    extract_xvar_choices <-
+      function(x, yvar) {
+        db_variables |>
+          dplyr::filter(
+            var_name != yvar
+          ) |>
+          dplyr::filter(
+            family_name == x
+          ) |>
+          pull(var_name)
+      }
+
+    xvar_choice_list <- purrr::map2(
+      family_names$var_name,
+      yvar,
+      extract_xvar_choices
+    )
+    names(xvar_choice_list) <- family_names$var_name
+
+    xvar_choice_list <- c(outcomes_list, xvar_choice_list)
+
+    return(xvar_choice_list)
+  }
+
   tabItem(
     tabName = "scatter",
 

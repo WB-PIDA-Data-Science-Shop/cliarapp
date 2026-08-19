@@ -1,9 +1,3 @@
-# Load cliaretl R package
-library(cliaretl)
-
-db_variables <- 
-  cliaretl::db_variables_final
-
 # 1. Anti-corruption institutions ======================
 vars_anticorruption <-
   db_variables %>%
