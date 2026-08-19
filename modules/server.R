@@ -71,7 +71,6 @@ server <- function(input, output, session) {
     global_data = global_data,
     variable_names = variable_names,
     db_variables = db_variables,
-    x_scatter_choices = x_scatter_choices,
     plotly_remove_buttons = plotly_remove_buttons,
     plot_height = plot_height
   )
